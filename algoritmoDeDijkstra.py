@@ -8,10 +8,14 @@ def caminhoMaisCurto(pai, ondeSeChegou):
   caminho.reverse()
   return print(caminho)
 
-
-def verticeMenorCusto(custos):
-  return min(custos, key=custos.get)
-
+def verticeMenorCusto(custos, verificados):
+  menorCusto = float("inf")
+  vMenorCusto = None
+  for vertice in custos.keys():
+    if custos[vertice] < menorCusto and vertice not in verificados:
+      menorCusto = custos[vertice]
+      vMenorCusto = vertice
+  return vMenorCusto
 
 def algoritmoDeDijkstra(graph, pontoDePartida, ondeSeQuerChegar, custos):
   paiVerticeAtual = {}
@@ -19,28 +23,22 @@ def algoritmoDeDijkstra(graph, pontoDePartida, ondeSeQuerChegar, custos):
   if pontoDePartida == ondeSeQuerChegar:
     return print([ondeSeQuerChegar])
   if graph and pontoDePartida and ondeSeQuerChegar:
-    # verticesVizinhos = graph[pontoDePartida].keys()
-    # for vertice in verticesVizinhos:
-    #  if graph[pontoDePartida][vertice] < custos[vertice]:
-    #    custos[vertice] = graph[pontoDePartida][vertice]
     custos[pontoDePartida] = 0
-    ##
     verificados = []
-    # verificados = [pontoDePartida]
-    # pontoDePartida = verticeMenorCusto(custos)
     while pontoDePartida is not None:
       custo = custos[pontoDePartida]
       verticesVizinhos = graph[pontoDePartida].keys()
       for vertice in verticesVizinhos:
-        # aqui talvez tenha um erro
-        novoCusto = custo + verticesVizinhos[vertice]
-        if custos[vertice] > novoCusto:
+        novoCusto = custo + graph[pontoDePartida][vertice]
+        if novoCusto < custos[vertice]:
           custos[vertice] = novoCusto
           paiVerticeAtual[vertice] = pontoDePartida
-          verificados.append(pontoDePartida)
-          pontoDePartida = verticeMenorCusto(custos)
-
-    return print("Não é possível chegar nesse ponto")
+      verificados.append(pontoDePartida)
+      pontoDePartida = verticeMenorCusto(custos, verificados)
+    if not paiVerticeAtual[ondeSeQuerChegar]:
+      return print("Não é possível chegar nesse ponto")
+    else:
+      return caminhoMaisCurto(paiVerticeAtual, ondeSeQuerChegar)
   return print("Algum dos parâmetros está vazio")
 
 
@@ -61,3 +59,5 @@ custos["inicio"] = infinito
 custos["a"] = infinito
 custos["b"] = infinito
 custos["fim"] = infinito
+
+algoritmoDeDijkstra(graph, "inicio", "fim", custos)
