@@ -1,3 +1,8 @@
+def inicializaCustos(vertices):
+  custos = {}
+  for vertice in vertices:
+    custos[vertice] = float("inf")
+  return custos
 
 def caminhoMaisCurto(pai, ondeSeChegou):
   noAtual = ondeSeChegou
@@ -17,9 +22,10 @@ def verticeMenorCusto(custos, verificados):
       vMenorCusto = vertice
   return vMenorCusto
 
-def algoritmoDeDijkstra(graph, pontoDePartida, ondeSeQuerChegar, custos):
+def algoritmoDeDijkstra(graph, pontoDePartida, ondeSeQuerChegar):
   paiVerticeAtual = {}
   paiVerticeAtual[pontoDePartida] = None
+  custos = inicializaCustos(graph.keys())
   if pontoDePartida == ondeSeQuerChegar:
     return print([ondeSeQuerChegar])
   if graph and pontoDePartida and ondeSeQuerChegar:
@@ -53,11 +59,5 @@ graph["b"]["a"] = 3
 graph["b"]["fim"] = 5
 graph["fim"] = {}
 
-infinito = float("inf")
-custos = {}
-custos["inicio"] = infinito
-custos["a"] = infinito
-custos["b"] = infinito
-custos["fim"] = infinito
 
-algoritmoDeDijkstra(graph, "inicio", "fim", custos)
+algoritmoDeDijkstra(graph, "inicio", "fim")
